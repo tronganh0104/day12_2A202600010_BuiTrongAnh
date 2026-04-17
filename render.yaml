@@ -18,8 +18,3 @@ services:
         sync: false
       - key: AGENT_API_KEY
         generateValue: true
-
-  - type: keyvalue
-    name: agent-cache
-    plan: free
-    maxmemoryPolicy: allkeys-lru

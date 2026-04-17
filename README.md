@@ -1,109 +1,188 @@
-# Day 12 — Deployment: Đưa Agent Lên Cloud
+﻿# Day 12 Lab Submission - Deployment and Production Agent
 
-> **AICB-P1 · VinUniversity 2026**  
-> Repository thực hành đi kèm bài giảng Day 12.  
-> Mỗi phần có ví dụ **cơ bản** (hiểu concept) và **chuyên sâu** (production-ready).
+## Overview
 
----
+Repository nay la bai nop Day 12 ve:
 
-## Cấu Trúc Project
+- localhost vs production
+- Docker va containerization
+- cloud deployment
+- API security
+- scaling va reliability
+- final production-ready agent
 
+## Files For Grading
+
+Nguoi cham nen xem theo thu tu nay:
+
+1. [MISSION_ANSWERS.md](./MISSION_ANSWERS.md)
+2. [DEPLOYMENT.md](./DEPLOYMENT.md)
+3. [06-lab-complete](./06-lab-complete)
+4. [screenshots](./screenshots)
+
+## Repository Structure
+
+```text
+day12_2A202600010_BuiTrongAnh/
+├── 01-localhost-vs-production/
+├── 02-docker/
+├── 03-cloud-deployment/
+├── 04-api-gateway/
+├── 05-scaling-reliability/
+├── 06-lab-complete/
+├── screenshots/
+├── MISSION_ANSWERS.md
+├── DEPLOYMENT.md
+└── README.md
 ```
-day12_ha-tang-cloud_va_deployment/
-├── 01-localhost-vs-production/     # Section 1: Dev ≠ Production
-│   ├── develop/                      #   Agent "đúng kiểu localhost"
-│   └── production/                   #   12-Factor compliant agent
-│
-├── 02-docker/                      # Section 2: Containerization
-│   ├── develop/                      #   Dockerfile đơn giản
-│   └── production/                   #   Multi-stage + Docker Compose stack
-│
-├── 03-cloud-deployment/            # Section 3: Cloud Options
-│   ├── railway/                    #   Deploy Railway (< 5 phút)
-│   ├── render/                     #   Deploy Render + render.yaml
-│   └── production-cloud-run/         #   GCP Cloud Run + CI/CD
-│
-├── 04-api-gateway/                 # Section 4: Security
-│   ├── develop/                      #   API Key authentication
-│   └── production/                   #   JWT + Rate Limiting + Cost Guard
-│
-├── 05-scaling-reliability/         # Section 5: Scale & Reliability
-│   ├── develop/                      #   Health check + graceful shutdown
-│   └── production/                   #   Stateless + Redis + Nginx LB
-│
-├── 06-lab-complete/                # Lab 12: Production-ready agent
-│   └── (full project kết hợp tất cả)
-│
-└── utils/                          # Mock LLM dùng chung (không cần API key)
-```
 
----
+## Final Project
 
-## 🚀 Bắt Đầu Nhanh
+Thu muc final project la [06-lab-complete](./06-lab-complete).
 
-**Muốn thử ngay?** → [QUICK_START.md](QUICK_START.md) (5 phút)
+Project nay bao gom:
 
-**Muốn học kỹ?** → [CODE_LAB.md](CODE_LAB.md) (3-4 giờ)
+- config tu environment variables
+- API key authentication
+- rate limiting
+- cost guard
+- health check
+- readiness check
+- graceful shutdown
+- structured logging
+- Docker multi-stage
+- deploy config cho Railway va Render
 
-## Cách Học
+## Public Deployment
 
-| Bước | Làm gì |
-|------|--------|
-| 0 | **[Khuyến nghị]** Đọc [QUICK_START.md](QUICK_START.md) để thử nhanh |
-| 1 | Đọc [CODE_LAB.md](CODE_LAB.md) để hiểu chi tiết |
-| 2 | Chạy ví dụ **basic** trước — hiểu concept |
-| 3 | So sánh với ví dụ **advanced** — thấy sự khác biệt |
-| 4 | Tự làm Lab 06 từ đầu trước khi xem solution |
-| 5 | Tham khảo [QUICK_REFERENCE.md](QUICK_REFERENCE.md) khi cần |
-| 6 | Xem [TROUBLESHOOTING.md](TROUBLESHOOTING.md) khi gặp lỗi |
+Final project da duoc deploy that tren Render:
 
----
+- Public URL: [https://day12-2a202600010-buitronganh.onrender.com](https://day12-2a202600010-buitronganh.onrender.com)
 
-## Yêu Cầu
+Endpoint public:
+
+- [https://day12-2a202600010-buitronganh.onrender.com/health](https://day12-2a202600010-buitronganh.onrender.com/health)
+- [https://day12-2a202600010-buitronganh.onrender.com/ready](https://day12-2a202600010-buitronganh.onrender.com/ready)
+
+Chi tiet test deploy nam trong [DEPLOYMENT.md](./DEPLOYMENT.md).
+
+## Screenshots
+
+Cac screenshot phuc vu cham bai duoc luu tai:
+
+- [dashboard.png](./screenshots/dashboard.png)
+- [health.png](./screenshots/health.png)
+- [ready.png](./screenshots/ready.png)
+- [ask-success.png](./screenshots/ask-success.png)
+
+## Prerequisites For Local Run
+
+De chay local:
+
+- Python 3.11+
+- Docker Desktop
+- Docker Compose
+
+## How To Run The Final Project Locally
+
+### Option 1: Run with Python
+
+Tu thu muc `06-lab-complete`:
 
 ```bash
-python 3.11+
-docker & docker compose
+python -m pip install -r requirements.txt
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-Mỗi folder có `requirements.txt` riêng. Không cần API key thật — các ví dụ dùng **mock LLM** để chạy offline.
+Test:
 
----
+```bash
+curl http://127.0.0.1:8000/health
+curl http://127.0.0.1:8000/ready
+curl http://127.0.0.1:8000/ask -X POST \
+  -H "X-API-Key: dev-key-change-me" \
+  -H "Content-Type: application/json" \
+  -d '{"question":"What is deployment?"}'
+```
 
-## Sections
+### Option 2: Run with Docker
 
-| # | Folder | Concept chính |
-|---|--------|--------------|
-| 1 | `01-localhost-vs-production` | Dev/prod gap, 12-factor, secrets |
-| 2 | `02-docker` | Dockerfile, multi-stage, docker-compose |
-| 3 | `03-cloud-deployment` | Railway, Render, Cloud Run |
-| 4 | `04-api-gateway` | Auth, rate limiting, cost protection |
-| 5 | `05-scaling-reliability` | Health check, stateless, rolling deploy |
-| 6 | `06-lab-complete` | **Full production agent** |
+Tu thu muc `06-lab-complete`:
 
----
+```bash
+docker compose up --build
+```
 
-## 📚 Lab Materials
+Test:
 
-Chúng tôi đã chuẩn bị đầy đủ tài liệu hướng dẫn:
+```bash
+curl http://localhost:8000/health
+curl http://localhost:8000/ready
+curl http://localhost:8000/ask -X POST \
+  -H "X-API-Key: dev-key-change-me-in-production" \
+  -H "Content-Type: application/json" \
+  -d '{"question":"What is deployment?"}'
+```
 
-### Cho Sinh Viên
+## Production Readiness Check
 
-| Tài liệu | Mô tả | Thời gian |
-|----------|-------|-----------|
-| **[CODE_LAB.md](CODE_LAB.md)** | Hướng dẫn lab chi tiết từng bước | 3-4 giờ |
-| **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** | Cheat sheet các lệnh và patterns | Tra cứu |
-| **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** | Giải quyết lỗi thường gặp | Khi cần |
+Trong thu muc final project co script kiem tra nhanh:
 
-### Cho Giảng Viên
+```bash
+cd 06-lab-complete
+python check_production_ready.py
+```
 
-| Tài liệu | Mô tả |
-|----------|-------|
-| **[INSTRUCTOR_GUIDE.md](INSTRUCTOR_GUIDE.md)** | Hướng dẫn chấm điểm và đánh giá |
+Ket qua hien tai:
 
-### Cách Sử Dụng
+- `20/20 checks passed`
+- `100%`
+- `PRODUCTION READY`
 
-1. **Trước lab:** Đọc [CODE_LAB.md](CODE_LAB.md) để hiểu tổng quan
-2. **Trong lab:** Làm theo từng Part, tham khảo [QUICK_REFERENCE.md](QUICK_REFERENCE.md)
-3. **Gặp lỗi:** Xem [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
-4. **Sau lab:** Nộp Part 6 Final Project để chấm điểm
+## How To Review Each Part
+
+### Part 1
+
+- Code: [01-localhost-vs-production](./01-localhost-vs-production)
+- Answers: [MISSION_ANSWERS.md](./MISSION_ANSWERS.md)
+
+### Part 2
+
+- Code: [02-docker](./02-docker)
+- Answers: [MISSION_ANSWERS.md](./MISSION_ANSWERS.md)
+
+### Part 3
+
+- Code: [03-cloud-deployment](./03-cloud-deployment)
+- Deployment proof: [DEPLOYMENT.md](./DEPLOYMENT.md)
+
+### Part 4
+
+- Code: [04-api-gateway](./04-api-gateway)
+- Answers: [MISSION_ANSWERS.md](./MISSION_ANSWERS.md)
+
+### Part 5
+
+- Code: [05-scaling-reliability](./05-scaling-reliability)
+- Answers: [MISSION_ANSWERS.md](./MISSION_ANSWERS.md)
+
+### Part 6
+
+- Final code: [06-lab-complete](./06-lab-complete)
+- Final deployment: [DEPLOYMENT.md](./DEPLOYMENT.md)
+- Final answers: [MISSION_ANSWERS.md](./MISSION_ANSWERS.md)
+
+## Notes For Instructor
+
+- Final grading should focus on the final deliverable in `06-lab-complete`.
+- The service is deployed and publicly reachable.
+- The protected `/ask` endpoint requires `X-API-Key`.
+- The real deployment secret is not committed to the repository.
+
+## Submission Summary
+
+- Mission answers completed: yes
+- Final project completed: yes
+- Final project deployed: yes
+- Public URL working: yes
+- Screenshots included: yes
